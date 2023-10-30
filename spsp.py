@@ -1,25 +1,40 @@
-import requests
+import requests,json
 
 # Your Spotify API credentials
-client_id=client_id
-client_secret=client_secret
+client_id='348de570cabd4bbdabb3eb80b2be3b54'
+client_secret='f6282eee472c4add954af47b5f5379c2'
 
 # Obtain an access token from Spotify
 token_url = 'https://accounts.spotify.com/api/token'
 data = {'grant_type': 'client_credentials'}
+
+class InvalidCalling(Exception):
+    @classmethod
+    def id(cls):
+        return "Invalid client id."
+    @classmethod
+    def secret(cls):
+        return "Invalid client secret."
+
 response = requests.post(token_url, data=data, auth=(client_id, client_secret))
+r=response.json()
 
-if response.status_code == 200:
-    access_token = response.json()['access_token']
-else:
-    print("Error obtaining access token.")
-    exit()
+if response.status_code!=200:
+    if r['error_description']=='Invalid client secret':
+        raise InvalidCalling(InvalidCalling.secret())
+    if r['error_description']=='Invalid client':
+        raise InvalidCalling(InvalidCalling.id())
+    else:
+        raise InvalidCalling(r['error_description'])
 
-squery=input("search what? ")
+access_token = r['access_token']
+
+
+zz=input("search what? ")
 # Use the access token to make a search request
 search_endpoint = 'https://api.spotify.com/v1/search'
 headers = {'Authorization': f'Bearer {access_token}'}
-params = {'q': squery, 'type': 'track'}
+params = {'q': zz, 'type': 'track'}
 response = requests.get(search_endpoint, params=params, headers=headers)
 
 if response.status_code == 200:
