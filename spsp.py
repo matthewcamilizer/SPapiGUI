@@ -1,8 +1,8 @@
 import requests,json
 
 # Your Spotify API credentials
-client_id='348de570cabd4bbdabb3eb80b2be3b54'
-client_secret='f6282eee472c4add954af47b5f5379c2'
+client_id=client_id
+client_secret=client_secret
 
 # Obtain an access token from Spotify
 token_url = 'https://accounts.spotify.com/api/token'
